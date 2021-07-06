@@ -7,7 +7,9 @@
 <form class="board" v-else >
   <div v-for="i in 3" :key="i">
     <div v-for="j in 3" :key="j">
-      <button v-on:click.prevent="selectSquare(i,j)" :style="cursorStyles(currentPlayer)" >
+      <button 
+          v-on:click.prevent="selectSquare(i,j)" 
+          :style="cursorStyles(currentPlayer)" >
         <img height="40" width="40" :src="tokenImg(i,j)"/>
       </button>
     </div>
@@ -23,6 +25,7 @@ var currentPlayer = 1;
 const path = ["img/0.png","img/x.png","img/o.png"];
 const token = [0, "x", "o"];
 var numMoves = 0;
+var flag = false;
 export default {
   name: "App",
   data() {
@@ -31,7 +34,8 @@ export default {
       board,
       currentPlayer,
       path,
-      token
+      token,
+      flag
     };
   },
   computed: 
@@ -63,39 +67,35 @@ export default {
       this.board = [[0,0,0], [0,0,0], [0,0,0]];
     },
     isWinner(player) {
-      const {board} = this;
-      numMoves++;
-      var flag = (
-          (board[0][0] === player &&
-           board[0][1] === player &&
-           board[0][2] === player) ||
-          (board[1][0] === player &&
-           board[1][1] === player &&
-           board[1][2] === player) ||
-          (board[2][0] === player &&
-           board[2][1] === player &&
-           board[2][2] === player) ||
-          (board[0][0] === player &&
-           board[1][0] === player &&
-           board[2][0] === player) ||
-          (board[0][1] === player &&
-           board[1][1] === player &&
-           board[2][1] === player) ||
-          (board[0][2] === player &&
-           board[1][2] === player &&
-           board[2][2] === player) ||
-          (board[0][0] === player &&
-           board[1][1] === player &&
-           board[2][2] === player) ||
-          (board[0][2] === player &&
-           board[1][1] === player &&
-           board[2][0] === player)
+      flag = (
+          (board[0][0] == player &&
+           board[0][1] == player &&
+           board[0][2] == player) ||
+          (board[1][0] == player &&
+           board[1][1] == player &&
+           board[1][2] == player) ||
+          (board[2][0] == player &&
+           board[2][1] == player &&
+           board[2][2] == player) ||
+          (board[0][0] == player &&
+           board[1][0] == player &&
+           board[2][0] == player) ||
+          (board[0][1] == player &&
+           board[1][1] == player &&
+           board[2][1] == player) ||
+          (board[0][2] == player &&
+           board[1][2] == player &&
+           board[2][2] == player) ||
+          (board[0][0] == player &&
+           board[1][1] == player &&
+           board[2][2] == player) ||
+          (board[0][2] == player &&
+           board[1][1] == player &&
+           board[2][0] == player)
       );
-      console.log(numMoves+": "+flag);
       return flag;
     },
     selectSquare(i,j) {
-      if (board[i-1][j-1]!=0) return;
       board[i-1][j-1] = this.token[this.currentPlayer];
       this.currentPlayer=3-this.currentPlayer;
     },

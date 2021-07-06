@@ -23,5 +23,3 @@ pnpm-debug.log*
 *.sw?
 node_modules/
 public/
-package-lock.json
-package.json
