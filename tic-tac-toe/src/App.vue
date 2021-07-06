@@ -6,8 +6,8 @@
 </div>
 <form class="board" v-else >
   <div v-for="i in 3" :key="i">
-    <div v-on:click.prevent="selectSquare(i,j)" v-for="j in 3" :key="j">
-      <button :style="cursorStyles(currentPlayer)" >
+    <div v-for="j in 3" :key="j">
+      <button v-on:click.prevent="selectSquare(i,j)" :style="cursorStyles(currentPlayer)" >
         <img height="40" width="40" :src="tokenImg(i,j)"/>
       </button>
     </div>
@@ -22,10 +22,12 @@ var board = [[0,0,0], [0,0,0], [0,0,0]];
 var currentPlayer = 1;
 const path = ["img/0.png","img/x.png","img/o.png"];
 const token = [0, "x", "o"];
+var numMoves = 0;
 export default {
   name: "App",
   data() {
     return {
+      numMoves,
       board,
       currentPlayer,
       path,
@@ -62,7 +64,7 @@ export default {
     },
     isWinner(player) {
       const {board} = this;
-      console.log(player+":"+board[0][0]);
+      numMoves++;
       var flag = (
           (board[0][0] === player &&
            board[0][1] === player &&
@@ -89,11 +91,11 @@ export default {
            board[1][1] === player &&
            board[2][0] === player)
       );
-      console.log(flag);
+      console.log(numMoves+": "+flag);
       return flag;
     },
     selectSquare(i,j) {
-     if (board[i-1][j-1]!=0) return;
+      if (board[i-1][j-1]!=0) return;
       board[i-1][j-1] = this.token[this.currentPlayer];
       this.currentPlayer=3-this.currentPlayer;
     },
