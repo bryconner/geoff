@@ -1,10 +1,8 @@
 <template>
-<div class="board" v-if="xWins || oWins">
-    <div v-if="xWins">x wins</div>
-    <div v-if="oWins">o wins</div>
-    <button @click="restart">restart</button>
-</div>
-<form class="board" v-else >
+<div class="board">
+    <div v-if="isWinner('x')"><h3>x wins</h3></div>
+    <div v-if="isWinner('o')"><h3>o wins</h3></div>
+<form class="board">
   <div v-for="i in 3" :key="i">
     <div v-for="j in 3" :key="j">
       <button 
@@ -15,8 +13,8 @@
     </div>
   </div>
   <button @click="restart">clear</button>
-</form>
-
+ </form>
+ </div>
 </template>
 
 <script>
@@ -38,18 +36,8 @@ export default {
       flag
     };
   },
-  computed: 
-  {
-    xWins() {
-      return this.isWinner("x");
-    },
-    oWins() {
-      return this.isWinner("o");
-    },
-    playerNum() { return currentPlayer; },
-  },
   methods: {
-    tokenImg(i,j) {
+      tokenImg(i,j) {
       var pathij = path[token.indexOf(board[i-1][j-1])];
       return require(`./${pathij}`);
     },
