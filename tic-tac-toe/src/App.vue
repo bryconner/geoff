@@ -22,7 +22,6 @@ var board = [[0,0,0], [0,0,0], [0,0,0]];
 var currentPlayer = 1;
 const path = ["img/0.png","img/x.png","img/o.png"];
 const token = [0, "x", "o"];
-const boardSquareNumber = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 var gameMoves = [];
 export default {
   name: "App",
@@ -32,11 +31,18 @@ export default {
       currentPlayer,
       path,
       token,
-      boardSquareNumber,
       gameMoves,
     };
   },
   methods: {
+    convertMove(i, j) {
+      const boardtoMove = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+      return boardtoMove[i,j];
+    },
+    reverseConvertMove(m) {
+      const movetoBoard = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2], [2, 3]];
+      return movetoBoard[m];
+    },
     computerMoves(i, j) {
       var move;
       var movePlaces;
@@ -45,11 +51,11 @@ export default {
       j = i;
         switch (gameMoves[0]) {
         case [5]:  // x moves center.   o plays in corner
-          movePlaces = [1, 3, 7, 9];
+          movePlaces = [0, 2, 6, 8];
           chosenMove = movePlaces[Math.random(movePlaces.length)];
-          move = this.convertMove(chosenMove);
-          console.log(move);
-          this.selectSquare(move[1], move[2]);
+          if (!this) console.log("This is missing.");
+          move = this.reverseConvertMove(chosenMove);
+          selectSquare(move[0], move[1]);
           break;
       }
     },
@@ -60,12 +66,10 @@ export default {
     cursorStyles(i) {
       var pathi = path[i];
       return {
-
         cursor: "url("+require(`./${pathi}`)+"), grab",
         float: "left",
         width: "70px",
         height: "70px",
-
       }
     },
     restart() {
@@ -101,14 +105,15 @@ export default {
            board[2][0] == player)
       );
     },
-
     selectSquare(i,j) {
+      var moved;
       board[i-1][j-1] = this.token[this.currentPlayer];
-      this.currentPlayer=3-this.currentPlayer;
-     // gameMoves += currentPlayer;
+      currentPlayer=3-currentPlayer;
+      moved = convertMove(i, j);
+      gameMoves += moved;
       console.log(gameMoves);
       if (this.currentPlayer == 2) {
-        this.computerMoves(i, j);
+        computerMoves(i, j);
       }
     },
   },
