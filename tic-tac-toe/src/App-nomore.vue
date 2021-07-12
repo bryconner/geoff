@@ -23,7 +23,7 @@ var currentPlayer = 1;
 const path = ["img/0.png","img/x.png","img/o.png"];
 const token = [0, "x", "o"];
 const boardSquareNumber = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-var gameMoves = [];
+var playerMoves = [];
 export default {
   name: "App",
   data() {
@@ -33,27 +33,11 @@ export default {
       path,
       token,
       boardSquareNumber,
-      gameMoves,
+      playerMoves,
     };
   },
   methods: {
-    computerMoves(i, j) {
-      var move;
-      var movePlaces;
-      var chosenMove;
-      i = j;
-      j = i;
-        switch (gameMoves[0]) {
-        case [5]:  // x moves center.   o plays in corner
-          movePlaces = [1, 3, 7, 9];
-          chosenMove = movePlaces[Math.random(movePlaces.length)];
-          move = this.convertMove(chosenMove);
-          console.log(move);
-          this.selectSquare(move[1], move[2]);
-          break;
-      }
-    },
-    tokenImg(i,j) {
+      tokenImg(i,j) {
       var pathij = path[token.indexOf(board[i-1][j-1])];
       return require(`./${pathij}`);
     },
@@ -65,13 +49,11 @@ export default {
         float: "left",
         width: "70px",
         height: "70px",
-
       }
     },
     restart() {
       this.board = [[0,0,0], [0,0,0], [0,0,0]];
-      this.gameMoves = [];
-      this.currentPlayer = 1;
+      this.playerMoves = [];
     },
     isWinner(player) {
       return (
@@ -101,20 +83,33 @@ export default {
            board[2][0] == player)
       );
     },
-
+ //     const values=[[0], [0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];      
+    computerMoves(allMoves) {
+      var move;
+      var movePlaces;
+      var chosenMove;
+        switch (allMoves) {
+        case [5]:
+          // x moves center.   o can only move in corner
+        movePlaces = [1, 3, 7, 9];
+        chosenMove = movePlaces[Math.random(movePlaces.length)];
+        //move = this.convertMove(chosenMove);
+        console.log(move);
+        this.selectSquare(move[1], move[2]);
+        break;
+      }
+    },
     selectSquare(i,j) {
       board[i-1][j-1] = this.token[this.currentPlayer];
       this.currentPlayer=3-this.currentPlayer;
-     // gameMoves += currentPlayer;
-      console.log(gameMoves);
-      if (this.currentPlayer == 2) {
-        this.computerMoves(i, j);
-      }
+      playerMoves += Array(this.boardSquareNumber[i-1][j-1]); 
+      console.log(playerMoves);
+      if (this.currentPlayer == 2 ) this.computerMoves();
     },
   },
 };
 </script>
 
 <style scoped>
-.board { float: left; width: 220px;}
+.board { float: left; width: 230px;}
 </style>
