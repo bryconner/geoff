@@ -94,12 +94,60 @@ export default {
         var chosenMove;
         switch (gameMoves[0]) {
           case 4:  // x moves center.   o plays in corner
-            movePlaces = [0, 2, 6, 8];
-            chosenMove = movePlaces[Math.floor(Math.random()*(movePlaces.length+1))];
-            move = [Math.floor(chosenMove/3+1), (chosenMove%3+1)];
-            this.selectSquare(move[0], move[1]);
-            break;
+            switch (gameMoves.length) {
+              case 1:
+                movePlaces = [0, 2, 6, 8];
+                chosenMove = movePlaces[Math.floor(Math.random()*(movePlaces.length+1))];
+                move = [Math.floor(chosenMove/3+1), (chosenMove%3+1)];
+                this.selectSquare(move[0], move[1]);
+                break;
+              default:  //block all wins first or move randomly
+                movePlaces = [];
+                for (var x=0; x<3; x++)
+                  for (var y=0; y<3; y++)
+                    if (!board[x][y]) movePlaces.push(x*3+y%3); //add all open squares
+                m=-1;
+                movePlaces.forEach(function(item){
+                  switch (item) { // check for possible wins for x and block
+                    case 0:
+                      if (board[1][1]==board[2][2] || board[0][1] == board[0][2] ||
+                      board[1][0] == board[2][0]) m=item;
+                      break;
+                    case 1:
+                      if (board[0][0]==board[2][0] || board[1][1]==board[2][1]) m=item;
+                      break;
+                    case 2:
+                      if (board[0][0] == board[0][1] || board[1][1] == board[2][0]) m=item;
+                      break
+                    case 3:
+                      if (board[0][0] == board[2][0] || board[1][1]==board[1][2]) m=item;
+                      break;
+                    case 4:
+                      if (board[0][0] == board[2][2] || board[0][1]==board[2][1] ||
+                          board[0][2] == board[2][0] || board[1][0]==board[1][2]) m=item;
+                      break;
+                    case 5:
+                      if (board[0][2] == board[2][2] || board[1][0]== board[1][1]) m=item;
+                      break
+                    case 6:
+                      if (board[0][0] == board[1][0] || board[2][1] == board[2][2] || 
+                      board[1][1] == board[0][2]) m=item;
+                      break;
+                    case 7:
+                      if (board[2][0] == board[2][2] || board[0][1] == board[1][1]) m=item;
+                      break;
+                    case 8:
+                      if (board[0][2] == board[1][2] || board[2][0]==board[2][1] || 
+                      board[0][0]==board[1][1]) m = item;
+                      break;
+                    default:
+                      m = movePlaces[Math.floor(Math.random()*movePlaces.length)];
+                  }
+                });
+            }
         }
+        move = [Math.floor(m/3+1), (m%3+1)];
+        this.selectSquare(move[0], move[1]);
       }
     },
   },
