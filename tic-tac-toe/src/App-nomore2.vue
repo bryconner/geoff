@@ -82,21 +82,26 @@ export default {
       );
     },
     selectSquare(i,j) {
+      const movetoBoard = {0:{'y':0,'x':0}, 1:{'y':0,'x':1}, 2:{'y':0,'x':2}, 
+                  3:{'y':1,'x':0}, 4:{'y':1,'x':1}, 5:{'y':1,'x':2}, 
+                  6:{'y':2,'x':0}, 7:{'y':2,'x':1}, 8:{'y':2,'x':2}};
       var m;
-      if (!i || !j || isNaN(board[i-1][j-1]) || board[i-1][j-1]>0) return;  //someone already moved here; skip rest. 
+      if (board[i-1][j-1]) return;  //someone already moved here
       board[i-1][j-1] = this.token[this.currentPlayer];
       this.currentPlayer=3-this.currentPlayer;
-      m = (i-1)*3+(j-1)%3;
+      for (m=0;movetoBoard[m]['y']!=i-1 && movetoBoard[m]['x']!=j-1;m++);
+      console.log(m);
       gameMoves.push(m);
+      console.log(gameMoves);
       if (this.currentPlayer == 2) {
-        var move = [-1,-1];
+        var move;
         var movePlaces;
         var chosenMove;
         switch (gameMoves[0]) {
           case 4:  // x moves center.   o plays in corner
             movePlaces = [0, 2, 6, 8];
-            chosenMove = movePlaces[Math.floor(Math.random()*(movePlaces.length+1))];
-            move = [Math.floor(chosenMove/3+1), (chosenMove%3+1)];
+            chosenMove = movePlaces[Math.random(movePlaces.length)];
+            move = movetoBoard[chosenMove];
             this.selectSquare(move[0], move[1]);
             break;
         }
