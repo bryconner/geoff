@@ -28,11 +28,12 @@
   
 </template>
 <script>
-import { iconx as icon } from "vue-svg-iconx";
+import iconx from "vue-svg-iconx";
 const requireAll = requireContext => requireContext.keys().map(requireContext);
 requireAll(require.context("./assets/svg/", false, /\.svg$/));
 export default {
   name: "App",
+  components: { iconx },
   data() {
     return {
 
@@ -42,6 +43,7 @@ export default {
 </script>
 <style>
 #board { background: url(./assets/board.jpg); width: .80vw;}
-.pip0 { color: black;}
-.pip1 { color: white;}
+.pip0 { color: rgb(26, 26, 26);}
+.pip1 { color: rgb(223, 223, 223);}
+#backgammon, #board, #section1, #section2, #section3, #section4, #panel { float: left; }
 </style>
