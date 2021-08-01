@@ -1,0 +1,6 @@
+plugins:
+  - cleanupAttrs: true
+  - removeDoctype: true
+  - removeComments: true
+  - removeTitle: true
+  - removeDesc: true
